@@ -7,6 +7,11 @@ app.use(helmet());
 app.use(express.json({ limit: '20kb' }));
 const PORT = Number(process.env.PORT || 3000);
 const MONGODB_URI = process.env.MONGODB_URI;
+
+app.get('/', (_req, res) => {
+  res.send('Welcome to home page');
+});
+
 const itemSchema = new mongoose.Schema(
   { name: { type: String, required: true, trim: true } },
   { timestamps: true }
@@ -34,9 +39,13 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 async function start() {
-  if (!MONGODB_URI) throw new Error('MONGODB_URI is missing from .env');
-   await mongoose.connect(MONGODB_URI);
-  console.log('Connected to MongoDB Atlas');
+  if (MONGODB_URI) {
+    await mongoose.connect(MONGODB_URI);
+    console.log('Connected to MongoDB Atlas');
+  } else {
+    console.log('MONGODB_URI not set; starting without database connection');
+  }
+
   app.listen(PORT, '127.0.0.1', () => {
     console.log(`API listening on 127.0.0.1:${PORT}`);
   });

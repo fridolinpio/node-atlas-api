@@ -46,9 +46,9 @@ async function start() {
     console.log('MONGODB_URI not set; starting without database connection');
   }
 
-  app.listen(PORT, '127.0.0.1', () => {
-    console.log(`API listening on 127.0.0.1:${PORT}`);
-  });
+ app.listen(PORT, '0.0.0.0', () => {
+  console.log(`API listening on 0.0.0.0:${PORT}`);
+});
 }
 start().catch((err) => {
   console.error('Startup failed:', err.message);
